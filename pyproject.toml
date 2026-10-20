@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kohana-agent"
+version = "0.1.0"
+description = "Persona and local memory foundation for a Hermes-based personal agent"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = []
+
+[project.scripts]
+kohana = "kohana_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
