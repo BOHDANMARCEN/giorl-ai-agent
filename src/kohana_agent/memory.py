@@ -1,4 +1,4 @@
-"""Explicit local notes. No automatic Hermes injection or model calls."""
+"""Explicit local notes, shared by the CLI and optional Hermes provider."""
 
 from pathlib import Path
 from contextlib import contextmanager
@@ -6,6 +6,16 @@ import sqlite3
 
 
 class MemoryStore:
+    def recent(self, limit: int = 20):
+        if not 1 <= limit <= 100:
+            raise ValueError("limit має бути від 1 до 100")
+        with self._connect() as db:
+            db.row_factory = sqlite3.Row
+            return [dict(row) for row in db.execute(
+                "SELECT id, project, content, source, created_at FROM notes ORDER BY id DESC LIMIT ?",
+                (limit,),
+            )]
+
     def __init__(self, path: Path):
         path = path.expanduser().resolve()
         path.parent.mkdir(parents=True, exist_ok=True)
