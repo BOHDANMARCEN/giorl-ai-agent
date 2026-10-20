@@ -12,15 +12,16 @@ def render_persona(source: Path) -> str:
     if b"<!DOCTYPE" in data.upper() or b"<!ENTITY" in data.upper():
         raise ValueError("DTD та XML entities не підтримуються")
     root = ET.fromstring(data)
-    if root.tag != "ai_persona" or root.get("version") != "3.0":
-        raise ValueError("Потрібна ai_persona версії 3.0")
+    version = root.get("version")
+    if root.tag != "ai_persona" or version not in {"3.0", "3.1"}:
+        raise ValueError("Потрібна ai_persona версії 3.0 або 3.1")
     if root.get("language") != "uk":
         raise ValueError("Очікується language=uk")
     required = {"identity", "priority_and_boundaries", "language_and_voice",
                 "technical_partner", "context_and_memory", "response_contract"}
     if not required.issubset({child.tag for child in root}):
         raise ValueError("Відсутні обов'язкові розділи Persona")
-    lines = ["# Кохана — Persona 3.0", "",
+    lines = [f"# Кохана — Persona {version}", "",
              "Згенеровано з XML. Редагуй джерело та створюй новий профіль.", ""]
 
     def visit(element: ET.Element, depth: int) -> None:
