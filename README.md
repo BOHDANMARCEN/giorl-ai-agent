@@ -2,17 +2,17 @@
 
 Репозиторій: [BOHDANMARCEN/giorl-ai-agent](https://github.com/BOHDANMARCEN/giorl-ai-agent). Назва Python-пакета й CLI: `kohana-agent` та `kohana`.
 
-Персональна AI-співрозмовниця й технічна напарниця на базі **Hermes Agent**, із власною Persona 3.0 та довготривалою пам'яттю.
+Персональна AI-співрозмовниця й технічна напарниця на базі **Hermes Agent**, із власною Persona 3.1 та довготривалою пам'яттю.
 
 **Стан: 0.1.0 — технічна основа.** Це ще не готовий чат і не автономний агент. Репозиторій містить працездатні офлайн-утиліти: генерацію профілю Hermes та окреме SQLite-сховище нотаток. Рушій Hermes, LLM, голос та GUI сюди поки не інтегровані.
 
 ## Системна інструкція
 
-Повний оригінал: [persona_kohana_v3.xml](persona/persona_kohana_v3.xml). Файл збережено без змін і скорочень; це джерело істини для генерації `SOUL.md`.
+Основна системна інструкція: [Persona Kohana 3.1](persona/persona_kohana_v3_1.xml). Це обрана версія для нового профілю `.kohana/hermes-v3_1` і джерело для генерації `SOUL.md`. Попередня [Persona 3.0](persona/persona_kohana_v3.xml) зберігається для сумісності.
 
-### Persona 3.1 — окрема версія для експериментів
+### Persona 3.1 — основна версія
 
-[Persona Kohana 3.1](persona/persona_kohana_v3_1.xml) — альтернативна, більш романтична й спонтанна версія з гострішим, але доброзичливим сарказмом «Сучка 2.0». Оригінальну [Persona 3.0](persona/persona_kohana_v3.xml) не змінено. CLI підтримує обидві версії та вказує правильну версію у заголовку `SOUL.md`.
+[Persona Kohana 3.1](persona/persona_kohana_v3_1.xml) — обрана основна, більш романтична й спонтанна версія з гострішим, але доброзичливим сарказмом «Сучка 2.0». Оригінальну [Persona 3.0](persona/persona_kohana_v3.xml) не змінено. CLI підтримує обидві версії та вказує правильну версію у заголовку `SOUL.md`.
 
 Для **нового окремого профілю** (команда не змінить профіль, який уже існує):
 
@@ -25,7 +25,7 @@ kohana init --home .kohana/hermes-v3_1 --persona persona/persona_kohana_v3_1.xml
 ## Що вже реалізовано
 
 - Python CLI без сторонніх runtime-залежностей, Python 3.11+.
-- Перевірка XML Persona 3.0 та детермінована генерація читабельного `SOUL.md` зі збереженням розділів і прикладів.
+- Перевірка XML Persona 3.0/3.1 та детермінована генерація читабельного `SOUL.md` зі збереженням розділів і прикладів.
 - Створення **нового** профілю: `SOUL.md`, `memories/USER.md`, `memories/MEMORY.md`.
 - Відмова, якщо каталог профілю вже існує; наявні профілі не змінюються.
 - SQLite-нотатки: текст, проєкт, джерело та час UTC; пошук за буквальним підрядком із фільтром проєкту.
@@ -40,10 +40,10 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
 kohana doctor
-kohana init --home .kohana/hermes --persona persona/persona_kohana_v3.xml
+kohana init --home .kohana/hermes-v3_1 --persona persona/persona_kohana_v3_1.xml
 ```
 
-`init` не встановлює Hermes, не завантажує модель і не звертається до мережі. Якщо `.kohana/hermes` вже існує, обери новий каталог; автоматичного перезапису немає. У разі помилки диска може залишитися частково створений новий каталог: перевір його перед повторенням.
+`init` не встановлює Hermes, не завантажує модель і не звертається до мережі. Якщо `.kohana/hermes-v3_1` вже існує, обери новий каталог; автоматичного перезапису немає. У разі помилки диска може залишитися частково створений новий каталог: перевір його перед повторенням.
 
 Пакет встановлює тільки CLI; джерело XML залишається у репозиторії, тому шлях передається явно через `--persona`.
 
@@ -54,7 +54,7 @@ kohana init --home .kohana/hermes --persona persona/persona_kohana_v3.xml
 Після встановлення, у тому самому shell із кореня Kohana:
 
 ```bash
-export HERMES_HOME="$PWD/.kohana/hermes"
+export HERMES_HOME="$PWD/.kohana/hermes-v3_1"
 hermes setup
 hermes
 ```
@@ -78,7 +78,8 @@ kohana memory --db .kohana/memory.sqlite3 search 'Hermes' --project kohana
 
 | Шлях | Призначення |
 | --- | --- |
-| `persona/persona_kohana_v3.xml` | Оригінальна Persona 3.0, джерело істини |
+| `persona/persona_kohana_v3_1.xml` | Основна Persona 3.1, джерело для SOUL.md |
+| `persona/persona_kohana_v3.xml` | Попередня Persona 3.0 для сумісності |
 | `src/kohana_agent/` | CLI, компілятор Persona, профіль, сховище |
 | `docs/ARCHITECTURE.md` | Компоненти, потоки даних і межі довіри |
 | `docs/HERMES.md` | Перевірені шляхи та план інтеграції |
