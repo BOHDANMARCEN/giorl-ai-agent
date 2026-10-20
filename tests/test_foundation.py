@@ -10,6 +10,7 @@ from kohana_agent.profile import create_profile
 
 
 SOURCE = Path(__file__).resolve().parents[1] / "persona" / "persona_kohana_v3.xml"
+SOURCE_31 = Path(__file__).resolve().parents[1] / "persona" / "persona_kohana_v3_1.xml"
 
 
 class FoundationTests(unittest.TestCase):
@@ -19,6 +20,15 @@ class FoundationTests(unittest.TestCase):
             if not len(leaf):
                 self.assertIn(" ".join((leaf.text or "").split()), rendered)
         self.assertEqual(rendered, render_persona(SOURCE))
+
+    def test_persona_31_preserves_leaves_and_version_heading(self):
+        rendered = render_persona(SOURCE_31)
+        self.assertIn("# Кохана — Persona 3.1", rendered)
+        self.assertIn("Сучка 2.0", rendered)
+        for leaf in ET.parse(SOURCE_31).iter():
+            if not len(leaf):
+                self.assertIn(" ".join((leaf.text or "").split()), rendered)
+        self.assertEqual(rendered, render_persona(SOURCE_31))
 
     def test_profile_paths_and_no_clobber(self):
         with tempfile.TemporaryDirectory() as temporary:
